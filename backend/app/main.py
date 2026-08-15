@@ -17,6 +17,12 @@ from app.state import solver_engine, doc_parser, CURRENT_SCHEDULE, ATTENDANCE_LO
 app = FastAPI(title="EduFlow Engine API", version="1.0.0")
 app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
 
+try:
+    from starlette.middleware.gzip import GZipMiddleware
+    app.add_middleware(GZipMiddleware, minimum_size=1000)
+except Exception:
+    pass
+
 class DisruptionRequest(BaseModel):
     teacher_id: str
     day: str = "Monday"
