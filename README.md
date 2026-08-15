@@ -1,101 +1,139 @@
 # ⚡ EduFlow OS: Autonomous School Operations Engine
 
 > **Future Ready Hackathon 2026 Submission — Team Ragnarok (VIT Pune)**  
-> *Transforming physical paperwork, static spreadsheets, and manual attendance into a real-time, self-orchestrating school engine.*
+> *Transforming physical paperwork, static spreadsheets, and manual attendance into a real-time, self-orchestrating school operating system.*
 
 ---
 
-## 📌 Problem Statement & Vision
+## 📌 Problem Statement & Core Vision
 
-Schools suffer from daily operational friction:
-- When a teacher calls in sick at 7:30 AM, administrators spend hours scrambling while students lose class time.
-- Physical admission forms and medical slips pile up unread in paper trays for weeks.
-- Attendance systems suffer from proxy fraud ("buddy-punching"), where students swap ID cards.
+Educational institutions leak hundreds of administrative hours each week on mechanical friction:
+* **The 7:30 AM Timetable Scramble**: When teachers call in sick, staff spend 2–3 hours manually recalculating teacher availability while classes sit unassigned.
+* **Paperwork Deadlocks**: Handwritten admission forms and medical slips sit unreviewed for weeks in paper trays.
+* **Attendance Fraud ("Buddy-Punching")**: Traditional RFID cards and manual roll-calls enable proxy attendance fraud.
 
-**EduFlow OS** operates as an **Autonomous School Operating System**. Powered by Google Gemini 1.5 Vision VLMs, Google OR-Tools CP-SAT Solvers, and Edge Computer Vision, EduFlow replaces fragmented tools with a self-resolving, real-time operating layer.
+**EduFlow OS** transforms traditional school administration into an **autonomous, reactive digital campus**. Powered by **Google Gemini 1.5 Vision VLMs**, **Google OR-Tools CP-SAT Combinatorial Solvers**, and **Dual-Modal Edge Computer Vision**, EduFlow unifies admissions, scheduling, anti-cheat attendance, and student safety into a single real-time engine.
 
 ---
 
-## 📁 Modular Directory Structure
+## 🚀 Core Features & Technical Highlights
 
-```text
-Future_Ready_Hackathon/
-├── backend/                  # Python FastAPI Backend & Optimization Engine
-│   ├── app/
-│   │   ├── main.py           # REST API routes & controllers
-│   │   ├── state.py          # Centralized in-memory campus state DB
-│   │   ├── solver.py         # Google OR-Tools CP-SAT Timetable Engine
-│   │   ├── parser.py         # Gemini 1.5 Vision VLM Document Reader
-│   │   └── mock_data.py      # Seed data (CBSE Class 10 roster & timetable)
-├── frontend/                 # React 19 + Tailwind CSS v4 Dashboard
-│   ├── src/components/       # Modular UI components (Bento Grid, Kiosk, Timetable)
-├── tests/                    # 60+ Hardcore Chaos, Adversarial, & Unit Tests
-├── docs/                     # Specifications, SRS, Architecture, PRD, & Research
-└── scripts/                  # Automated Quality Gates & Platinum Governance
+```mermaid
+flowchart TD
+    subgraph Ingestion [Perception Layer]
+        A[Handwritten Form Upload] --> B[Gemini 1.5 Flash Vision VLM]
+        B --> C{Confidence >= 0.80?}
+        C -->|Yes| D[Auto-Enroll & Database Sync]
+        C -->|No / Smudged| E[Human-in-the-Loop Review Inbox]
+    end
+
+    subgraph Operations [Autonomous Optimization]
+        F[Teacher Absence Alert] --> G[Google OR-Tools CP-SAT Engine]
+        G -->|Solves in < 50ms| H[Optimal Reassigned Timetable]
+    end
+
+    subgraph Security [Zero-Hardware Edge CV]
+        I[Student ID QR Scan] --> J{Live Face in Frame?}
+        J -->|Yes| K[✅ Attendance Marked + Green Flash]
+        J -->|No / Proxy Attempt| L[❌ Blocked: Anti-Proxy Alert]
+    end
 ```
 
----
-
-## ✨ Core Features & Technical Highlights
-
-### 1. 🪄 Magic Dropzone (Vision-Language Model Ingestion)
-* **Zero-Shot VLM Parsing**: Uses Google Gemini 1.5 Vision to parse handwritten forms without pre-defined templates.
-* **Human-in-the-Loop Safety**: Low-confidence extractions (< 0.80) are automatically routed to the **Human Review Inbox**.
+### 1. 🪄 Magic Dropzone (Multimodal VLM Zero-Shot Ingestion)
+* **Zero-Shot Document Parsing**: Leverages **Google Gemini 1.5 Flash Vision** to extract structured schemas from unstandardized handwritten forms, medical records, and field trip permissions.
+* **Calibrated Uncertainty & HITL**: Automatically flags smudged or ambiguous fields (Aadhaar, DoB) and routes them to the **Human Review Inbox** with pre-filled forms.
 
 ### 2. ⚡ Reactive Timetable Engine & Live Disruption Solver
-* **Google OR-Tools (CP-SAT Solver)**: Solves hard constraints (teacher specialization, room capacities, zero double-booking) in **< 0.05 seconds**.
-* **Real-Time Reallocation**: When a teacher is marked absent, the solver instantly reassigns coverage across available staff.
+* **Combinatorial Constraint Solver**: Built on **Google OR-Tools (CP-SAT)**, solving complex schedules against hard constraints (teacher specialization, room capacities, zero double-booking) in **< 0.05 seconds**.
+* **One-Click Disruption Resolution**: When a teacher calls in sick, the engine recalculates coverage across available staff instantly without cascading schedule conflicts.
 
-### 3. 🛡️ Smart Kiosk Attendance (Anti-Buddy Punching)
-* **100% Software ($0 Hardware Overhead)**: Operates on standard webcams—eliminates expensive RFID gate costs.
-* **Dual-Modal Edge CV Security**: Scans student QR codes while detecting live human faces, blocking proxy attendance.
+### 3. 🛡️ Smart Kiosk Attendance (Dual-Modal Anti-Buddy Punching)
+* **100% Zero-Hardware Overhead ($0)**: Runs entirely on standard consumer laptop/tablet webcams—eliminates expensive biometric/RFID gates.
+* **Dual-Modal Security**: Enforces that a valid ID card QR scan *must* coincide with an active, real-time human face detected in the webcam stream via **MediaPipe / Edge Computer Vision**.
 
 ### 4. 📊 Academic Risk & Predictive Analytics
-* Evaluates scan frequency, truancy patterns, and missing documents to highlight students at academic risk proactively.
+* Proactively calculates academic risk indices and staffing bottlenecks using attendance velocity, truancy anomalies, and missing documentation.
 
 ---
 
 ## 🛠️ Technology Stack
 
-| Layer | Technology Used | Purpose |
+| Layer | Technologies Used | Key Purpose |
 |---|---|---|
-| **Perception Layer** | Google Gemini 1.5 Vision VLM | Zero-shot handwritten document reading |
-| **Edge Vision Layer** | Google MediaPipe / Edge CV | Real-time 60 FPS face detection in browser |
-| **Optimization Engine** | Google OR-Tools (CP-SAT) | Combinatorial constraint solver for timetabling |
-| **Backend API** | Python 3.10+, FastAPI, Uvicorn | High-performance asynchronous REST API |
-| **Frontend UI** | React 19, Vite, Tailwind CSS v4 | Bento Grid layout & 3D CSS animations |
+| **Frontend UI** | React 19, Vite, Tailwind CSS v4, Framer Motion | High-performance reactive Bento Grid dashboard |
+| **Edge Computer Vision** | Google MediaPipe, WebRTC, WASM | In-browser 60 FPS face tracking & anti-proxy verification |
+| **Backend REST API** | Python 3.11, FastAPI, Uvicorn, GZip | High-throughput asynchronous REST microservices |
+| **Optimization Solver** | Google OR-Tools (CP-SAT Model) | Combinatorial constraint optimization engine |
+| **Vision-Language AI** | Google Gemini 1.5 Flash Vision | Multimodal zero-shot handwritten document reader |
+| **Hosting & Edge CDN** | Vercel (Frontend Edge) + Render / HF (Backend) | Free-tier, zero-downtime, global HTTPS delivery |
 
 ---
 
-## 🚦 Quickstart Guide
+## 🚦 Quickstart & Local Setup
 
-### 1. Start FastAPI Backend
+### 1. Clone Repository
+```bash
+git clone https://github.com/DevangML/Future_Ready_Hackathon.git
+cd Future_Ready_Hackathon
+```
+
+### 2. Start FastAPI Backend Engine
 ```bash
 cd backend
 python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
+export GEMINI_API_KEY="your_gemini_api_key" # Optional (falls back to calibrated engine if unset)
 uvicorn app.main:app --reload --port 8000
 ```
 
-### 2. Start React Frontend
+### 3. Start React 19 Frontend
 ```bash
-cd frontend
+cd ../frontend
 npm install
 npm run dev
 ```
+Open **`http://localhost:3000`** in your browser.
 
-### 3. Run Quality Gates & Tests
+### 4. Run Automated Test Suites
 ```bash
-python3 -m unittest discover tests
-bash scripts/ai_session_gate.sh
-bash scripts/platinum_governance_check.sh
+bash scripts/run_tests.sh
 ```
 
 ---
 
-## 🏆 Hackathon Demo Flow (Live Showcase Script)
+## 🌐 Free-Tier Zero-Downtime Production Deployment
 
-1. **Step 1: Explore Dashboard**: View the Bento Grid KPIs, student enrollment, and active attendance status.
-2. **Step 2: Simulate Disruption**: Trigger "Teacher Absent" on Monday. Watch the OR-Tools engine reallocate staff in < 50ms.
-3. **Step 3: Magic Dropzone**: Drop a messy/smudged handwritten form. Observe zero-shot VLM parsing and HITL routing.
-4. **Step 4: Smart Kiosk**: Scan student QR cards with edge face tracking. Watch proxy scans get rejected and valid scans flash green.
+EduFlow OS is engineered for **100% free-tier hosting** with **sub-250ms latency** and **zero cold-starts**:
+
+1. **Backend (Render)**:
+   - Connect repo on [render.com](https://render.com) using [`render.yaml`](render.yaml).
+   - Set Environment Variable: `GEMINI_API_KEY`.
+2. **Frontend (Vercel)**:
+   - Connect repo on [vercel.com](https://vercel.com) (Preset: `Vite`, Root: `frontend`).
+   - Update destination in [`frontend/vercel.json`](frontend/vercel.json) to your Render backend URL.
+3. **Zero Cold-Start Keep-Alive**:
+   - Set up a free 10-minute HTTP ping on [cron-job.org](https://cron-job.org) targeting `https://<your-backend>.onrender.com/health`.
+
+---
+
+## 📚 Complete Project Documentation Suite
+
+Explore the comprehensive engineering documentation in the [`docs/`](docs/) directory:
+
+| Document | Description |
+|---|---|
+| [**Architecture & System Design**](docs/ARCHITECTURE.md) | Component topologies, data flow models, and constraint schemas |
+| [**Software Requirements (SRS)**](docs/srs.md) | Functional requirements, system constraints, and interface specs |
+| [**Product Requirements (PRD)**](docs/prd.md) | Vision, user personas, success metrics, and feature milestones |
+| [**REST API Reference**](docs/api-reference.md) | Full endpoint contracts, request/response schemas, and payload examples |
+| [**ATDD & Test Specifications**](docs/atdd-specifications.md) | Executable Given-When-Then acceptance criteria |
+| [**Traceability Matrix**](docs/traceability-matrix.md) | 100% bidirectional mapping between requirements and test suites |
+| [**NFR & Security Benchmark**](docs/nfr-performance-security.md) | Latency budgets, memory caps, and OWASP compliance standards |
+| [**VLM Research Whitepaper**](docs/research/technical-prompt-engineering-vlm-optimization-2026.md) | 2026 SOTA multimodal prompt engineering & calibration benchmarks |
+
+---
+
+## 👥 Team Ragnarok (VIT Pune)
+
+* Built with passion for the **Future Ready Hackathon 2026**.
+* Contact: [team@vit.edu](mailto:team@vit.edu)

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # ==============================================================================
-# BMad AI OS - Playwright Headless Browser QA Runner
+# EduFlow OS - Playwright Headless Browser QA Runner
 # Validates: Frontend application DOM health, Kiosk presence, UI smoke checks
 # ==============================================================================
 set -euo pipefail
@@ -8,7 +8,7 @@ set -euo pipefail
 REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$REPO_ROOT"
 
-echo "=== [BMad AI OS] Playwright & Browser Smoke QA ==="
+echo "=== [EduFlow OS] Playwright & Browser Smoke QA ==="
 FRONTEND_DIR="frontend"
 TARGET_URL="${1:-http://localhost:5173}"
 
