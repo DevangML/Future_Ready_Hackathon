@@ -1,0 +1,106 @@
+#!/usr/bin/env bash
+#
+# prepare-commit-msg hook: auto-adds AI tracking trailers to commits
+# that don't already have them. Ensures manual commits get tagged
+# so adoption metrics stay complete.
+#
+# AI-Phase is inferred from staged files and may be comma-separated
+# when a commit touches multiple lifecycle phases (e.g. "story,code").
+# The dashboard splits on comma and counts each phase independently.
+#
+# Install: cp this file to .git/hooks/prepare-commit-msg && chmod +x .git/hooks/prepare-commit-msg
+
+COMMIT_MSG_FILE="$1"
+COMMIT_SOURCE="$2"
+
+# Skip merge commits, amends, and squashes
+if [ "$COMMIT_SOURCE" = "merge" ] || [ "$COMMIT_SOURCE" = "squash" ]; then
+  exit 0
+fi
+
+# If AI-Phase trailer already present, leave the message alone
+if grep -qE "^AI-Phase:" "$COMMIT_MSG_FILE"; then
+  exit 0
+fi
+
+# Derive story ref from branch name (strips any prefix like feature/, fix/, etc.)
+STORY_REF=$(git branch --show-current 2>/dev/null | sed 's|.*/||')
+
+# Infer phase(s) from staged files
+# Each pattern is checked independently; all matching phases are collected.
+# A commit touching story files AND source code gets "story,code".
+STAGED=$(git diff --cached --name-only 2>/dev/null || true)
+
+PHASES=""
+
+add_phase() {
+  local p="$1"
+  # avoid duplicates
+  case ",$PHASES," in
+    *",$p,"*) ;;
+    *) PHASES="${PHASES:+$PHASES,}$p" ;;
+  esac
+}
+
+if [ -n "$STAGED" ]; then
+  # Only the upstream BMAD layout is recognised. Anything written outside
+  # _bmad-output/{planning,implementation}-artifacts/ falls through to the
+  # default "code" tag so projects can't accidentally drift to ad-hoc paths.
+
+  # Story files: _bmad-output/implementation-artifacts/N-N-title.md
+  if echo "$STAGED" | grep -qE '^_bmad-output/implementation-artifacts/[0-9]+-[0-9]+-[^/]+\.md$'; then
+    add_phase "story"
+  fi
+
+  # PRD
+  if echo "$STAGED" | grep -qE '^_bmad-output/planning-artifacts/.*prd.*\.md$'; then
+    add_phase "prd"
+  fi
+
+  # Architecture
+  if echo "$STAGED" | grep -qE '^_bmad-output/planning-artifacts/.*arch.*\.md$'; then
+    add_phase "architecture"
+  fi
+
+  # UX design
+  if echo "$STAGED" | grep -qE '^_bmad-output/planning-artifacts/.*ux.*\.md$'; then
+    add_phase "ux-design"
+  fi
+
+  # Epics
+  if echo "$STAGED" | grep -qE '^_bmad-output/planning-artifacts/.*epic.*\.md$'; then
+    add_phase "epics"
+  fi
+
+  # Sprint planning — sprint-status.yaml lives under implementation-artifacts
+  if echo "$STAGED" | grep -qE '^_bmad-output/implementation-artifacts/sprint-status\.yaml$'; then
+    add_phase "sprint-plan"
+  fi
+
+  # Review artifacts
+  if echo "$STAGED" | grep -qE '^_bmad-output/implementation-artifacts/reviews/'; then
+    add_phase "review"
+  fi
+
+  # Test files — matches *.test.*, *.spec.*, or anything under tests/
+  if echo "$STAGED" | grep -qE '(\.(test|spec)\.[^/]+$|^tests/)'; then
+    add_phase "test"
+  fi
+
+  # Source code — common language extensions, excluding test files already counted above
+  if echo "$STAGED" | grep -vE '(\.(test|spec)\.[^/]+$|^tests/)' | grep -qE '\.(ts|tsx|js|jsx|mjs|cjs|py|go|rs|java|rb|php|cs|swift|kt|c|cpp|h|sh|bash)$'; then
+    add_phase "code"
+  fi
+fi
+
+# Fall back to "code" if nothing matched
+if [ -z "$PHASES" ]; then
+  PHASES="code"
+fi
+
+cat >> "$COMMIT_MSG_FILE" <<EOF
+
+AI-Phase: ${PHASES}
+AI-Tool: manual
+Story-Ref: ${STORY_REF:-unknown}
+EOF

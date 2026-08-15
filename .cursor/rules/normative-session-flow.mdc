@@ -1,0 +1,28 @@
+---
+description: Normative session execution flow for BMad AI OS agents
+globs: **/*
+---
+
+# Normative Session Flow
+
+All agent sessions must strictly execute through the following phases:
+
+## 1. Pre-Session Context Retrieval
+- Read `.specify/memory/constitution.md` to load active constitutional constraints.
+- Query graphify AST cache (`graphify-out/`) to pinpoint files before opening raw content.
+- Verify active sprint story and requirements from PRD.
+
+## 2. Strict TDD Implementation (bmad-tea)
+- **Red Phase**: Author targeted failing tests reflecting PRD acceptance criteria.
+- **Green Phase**: Write the minimal code required to pass tests.
+- **Refactor Phase**: Optimize, clean, and verify no duplication exists.
+
+## 3. Structural & Size Compliance
+- Verify all modified files remain under the 200 LOC limit.
+- Keep methods concise, single-purpose, and under 30 LOC.
+- Tag any pattern innovations with `# INNOVATION:` comments.
+
+## 4. Verification Gate
+- Run `bash scripts/ai_session_gate.sh`.
+- Run `bash scripts/platinum_governance_check.sh`.
+- Remediate any warnings or errors before closing the session.

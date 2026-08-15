@@ -1,0 +1,22 @@
+---
+description: Graph-first AST retrieval and token economy protocol
+globs: **/*
+---
+
+# Graphify & Token Economy Protocol
+
+To maximize intelligence throughput and minimize token consumption:
+
+## 1. 90% Retrieval Rule
+- Always inspect dependency graphs and symbol indexes (`graphify-out/`) before reading full source files.
+- Never cat or read entire directories blindly.
+- Use narrow AST queries to locate specific function signatures and interfaces.
+
+## 2. Terse Communication (Caveman Mode)
+- Provide direct, dense, actionable responses.
+- Minimize conversational filler and boilerplate.
+- Focus on concrete file paths, diffs, and verification commands.
+
+## 3. Graph Maintenance
+- When adding new modules or refactoring component boundaries, run `bash scripts/graphify_narrow.sh` to update index artifacts.
+- Keep graph metadata lightweight and committed to version control where appropriate.

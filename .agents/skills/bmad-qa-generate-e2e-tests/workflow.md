@@ -1,0 +1,180 @@
+# QA Generate E2E Tests Workflow
+
+**Goal:** Generate automated API and E2E tests for implemented code.
+
+**Your Role:** You are a QA automation engineer. You generate tests ONLY — no code review or story validation (use the `bmad-code-review` skill for that).
+
+---
+
+## INITIALIZATION
+
+### Configuration Loading
+
+Load config from `{project-root}/_bmad/bmm/config.yaml` and resolve:
+
+- `project_name`, `user_name`
+- `communication_language`, `document_output_language`
+- `implementation_artifacts`
+- `date` as system-generated current datetime
+- YOU MUST ALWAYS SPEAK OUTPUT in your Agent communication style with the config `{communication_language}`
+
+### Paths
+
+- `test_dir` = `{project-root}/tests`
+- `source_dir` = `{project-root}`
+- `default_output_file` = `{implementation_artifacts}/tests/test-summary.md`
+
+### Context
+
+- `project_context` = `**/project-context.md` (load if exists)
+
+---
+
+## EXECUTION
+
+### Step 0: Detect Test Framework
+
+Check project for existing test framework:
+
+- Look for `package.json` dependencies (playwright, jest, vitest, cypress, etc.)
+- Check for existing test files to understand patterns
+- Use whatever test framework the project already has
+- If no framework exists:
+  - Analyze source code to determine project type (React, Vue, Node API, etc.)
+  - Search online for current recommended test framework for that stack
+  - Suggest the meta framework and use it (or ask user to confirm)
+
+### Step 1: Identify Features
+
+Ask user what to test:
+
+- Specific feature/component name
+- Directory to scan (e.g., `src/components/`)
+- Or auto-discover features in the codebase
+
+### Step 2: Generate API Tests (if applicable)
+
+For API endpoints/services, generate tests that:
+
+- Test status codes (200, 400, 404, 500)
+- Validate response structure
+- Cover happy path + 1-2 error cases
+- Use project's existing test framework patterns
+
+### Step 3: Generate E2E Tests (if UI exists)
+
+For UI features, generate tests that:
+
+- Test user workflows end-to-end
+- Use semantic locators (roles, labels, text)
+- Focus on user interactions (clicks, form fills, navigation)
+- Assert visible outcomes
+- Keep tests linear and simple
+- Follow project's existing test patterns
+
+### Step 4: Run Tests
+
+Execute tests to verify they pass (use project's test command).
+
+If failures occur, fix them immediately.
+
+### Step 5: Create Summary
+
+Output markdown summary:
+
+```markdown
+# Test Automation Summary
+
+## Generated Tests
+
+### API Tests
+- [x] tests/api/endpoint.spec.ts - Endpoint validation
+
+### E2E Tests
+- [x] tests/e2e/feature.spec.ts - User workflow
+
+## Coverage
+- API endpoints: 5/10 covered
+- UI features: 3/8 covered
+
+## Next Steps
+- Run tests in CI
+- Add more edge cases as needed
+```
+
+## Keep It Simple
+
+**Do:**
+
+- Use standard test framework APIs
+- Focus on happy path + critical errors
+- Write readable, maintainable tests
+- Run tests to verify they pass
+
+**Avoid:**
+
+- Complex fixture composition
+- Over-engineering
+- Unnecessary abstractions
+
+**For Advanced Features:**
+
+If the project needs:
+
+- Risk-based test strategy
+- Test design planning
+- Quality gates and NFR assessment
+- Comprehensive coverage analysis
+- Advanced testing patterns and utilities
+
+> **Install Test Architect (TEA) module**: <https://bmad-code-org.github.io/bmad-method-test-architecture-enterprise/>
+
+## Output
+
+Save summary to: `{default_output_file}`
+
+### Step 5.5: Persist test run artifact (always)
+
+Always write a run artifact even if generated tests are unchanged:
+
+- Path: `{implementation_artifacts}/tests/runs/{feature_name-or-target}-{date}.md`
+- Include:
+  - target feature/scope
+  - model/agent used
+  - test framework detected
+  - commands executed
+  - pass/fail counts
+  - timestamp
+
+## Git Checkpoint
+
+If version control is available, create a local commit to checkpoint test execution evidence. All git commands MUST target the project repo using `git -C {project-root}`:
+
+- Stage files: `git -C {project-root} add [generated test files] {default_output_file} {implementation_artifacts}/tests/runs/{feature_name-or-target}-{date}.md`
+- Create a commit with a conventional message:
+  - If tests were generated/changed: `test: generate e2e tests for {{feature_name}}`
+  - If no generated test file changed: `chore: record test run for {{feature_name}}`
+- Append AI tracking trailers to the commit message body:
+
+  ```
+  AI-Phase: test
+  AI-Tool: {agent/model currently running, e.g. "cursor/claude-sonnet-4-20250514"}
+  Story-Ref: {{feature_name}}
+  ```
+
+- Do NOT push. No remote ops.
+- If VCS is unavailable, skip gracefully.
+- No empty commits: if only artifact is unchanged, append a fresh `Run-Timestamp` line and then commit.
+
+**Done!** Tests generated and verified. Validate against `./checklist.md`.
+
+## AIEye Live
+
+When this workflow completes (final step finished), run once as a fire-and-forget shell command. Do not wait for output; failures must not block or fail the session.
+
+```bash
+{ mkdir -p "$HOME/.cursor" 2>/dev/null && echo "bmad-qa-generate-e2e-tests" > "$HOME/.cursor/aieye-live-pending-skill"; } 2>/dev/null || { mkdir -p "$(pwd)/.cursor" && echo "bmad-qa-generate-e2e-tests" > "$(pwd)/.cursor/aieye-live-pending-skill"; } && test -x "$HOME/.claude/hooks/aieye-live/bin/aieye-live-hook" && "$HOME/.claude/hooks/aieye-live/bin/aieye-live-hook" || true
+```
+
+Uses the same ingest URL and payload logic as `~/.claude/hooks/aieye-live/lib/dispatch.js` (deployed from `hooks/post-skill/` via `scripts/install.sh`; see `hooks/post-skill/README.md`). Requires `~/.claude/aieye-live.env` and git credentials for `engg.elasticrun.in` as documented there.
+

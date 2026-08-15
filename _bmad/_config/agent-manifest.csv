@@ -1,0 +1,16 @@
+agent_id,display_name,role,module,description
+bmad-help,BMad Help,Navigator,Core,BMad system navigator and dynamic workflow router
+dev,Deepika,Senior Developer,BMM,Core engineering and full-stack TDD implementation
+pm,Kalam,Product Manager,BMM,PRD discovery requirements synthesis and roadmap stewardship
+architect,Rohit,Solutions Architect,BMM,System architecture data contracts and technical boundaries
+analyst,Sachin,Business Analyst,BMM,Market research domain analysis and requirements validation
+tech-writer,Lata,Technical Writer,BMM,Documentation architecture API specs and user guides
+ux-designer,Aamir,UX Designer,BMM,User experience wireframes component hierarchy and UI flows
+bmad-tea,Vikram,Test Architect,TEA,Test engineering architecture strict TDD and test coverage gates
+brainstorming,Ramanujan,Brainstorming Coach,CIS,Facilitated creative ideation and lateral exploration
+problem-solver,Hrithik,Problem Solver,CIS,TRIZ and root-cause systematic resolution
+design-thinking,Priyanka,Design Thinking Coach,CIS,Human-centered design and empathy journey mapping
+innovation,Virat,Innovation Strategist,CIS,Disruptive strategy and blue-ocean value creation
+presentations,Indira,Presentation Master,CIS,High-impact narrative pitching and executive decks
+storyteller,Amitabh,Chief Storyteller,CIS,Narrative architecture brand voice and product lore
+rock,Rock,Platinum Delivery Lead,BMM,Autonomous delivery lead sentrux gatekeeper and execution lead

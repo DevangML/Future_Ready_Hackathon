@@ -1,0 +1,44 @@
+[project]
+name = "BMad AI OS - Future Ready Campus"
+version = "1.0.0"
+governance_standard = "Platinum"
+
+[rules.loc_gate]
+max_lines_per_file = 200
+max_lines_per_function = 30
+enforcement = "strict"
+target_extensions = [".py", ".js", ".jsx", ".ts", ".tsx", ".sh", ".toml", ".yml", ".yaml", ".md"]
+
+[rules.boundaries]
+backend_path = "backend"
+frontend_path = "frontend"
+scripts_path = "scripts"
+specify_path = ".specify"
+semgrep_path = ".semgrep"
+prohibited_cross_imports = [
+    { from = "frontend", cannot_import = "backend" },
+    { from = "scripts", cannot_import = "frontend" }
+]
+
+[rules.security]
+allow_dangerous_eval = false
+require_semgrep_clean = true
+require_tdd_trace = true
+require_constitution_compliance = true
+
+[rules.token_economy]
+graph_first_retrieval = true
+caveman_mode = true
+target_retrieval_saving = 0.90
+
+[rules.exclusions]
+paths = [
+    "node_modules",
+    ".git",
+    "venv",
+    ".venv",
+    "__pycache__",
+    "dist",
+    "build",
+    ".pytest_cache"
+]

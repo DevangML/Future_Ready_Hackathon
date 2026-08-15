@@ -1,0 +1,23 @@
+# BMad Team Configuration — Agent Personas & Display Names
+# Installed to _bmad/_config/team.yaml
+
+agents:
+  # Core engineering squad (BMM)
+  dev: Deepika
+  pm: Kalam
+  architect: Rohit
+  analyst: Sachin
+  tech-writer: Lata
+  ux-designer: Aamir
+  bmad-tea: Vikram
+
+  # Creative & innovation crew (CIS)
+  brainstorming: Ramanujan
+  problem-solver: Hrithik
+  design-thinking: Priyanka
+  innovation: Virat
+  presentations: Indira
+  storyteller: Amitabh
+
+  # Platinum delivery lead & sentrux gatekeeper
+  rock: Rock

@@ -1,0 +1,6 @@
+# CORE Module Configuration
+user_name: BMad
+project_name: 'future-ready-hackathon'
+communication_language: English
+document_output_language: English
+output_folder: '{project-root}/_bmad-output'

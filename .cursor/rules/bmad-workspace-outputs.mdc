@@ -1,0 +1,26 @@
+---
+description: Standards for BMad workspace outputs, artifacts, and scope control
+globs: **/*
+---
+
+# BMad Workspace Outputs & Artifacts
+
+All outputs generated in this workspace must satisfy:
+
+## 1. Scope Discipline (CIS Authority)
+- Implement only what is explicitly defined in the PRD/story specifications.
+- Do not add unapproved auxiliary features, complex configuration menus, or extraneous packages.
+
+## 2. Hard Constraints
+- Maximum 200 Lines Of Code per file.
+- Single-responsibility functions under 30 lines.
+- Reuse existing utilities before creating new helper functions.
+
+## 3. Innovation Tagging
+- Document learned patterns and innovative adaptations clearly:
+  ```python
+  # INNOVATION: CP-SAT solver constraint caching reduces reallocation latency to <50ms
+  ```
+
+## 4. Gate Verification
+- Every generated output must pass `bash scripts/ai_session_gate.sh` prior to merge.

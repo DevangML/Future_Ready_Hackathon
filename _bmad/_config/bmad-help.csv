@@ -1,0 +1,25 @@
+module,skill,display-name,menu-code,description,action,args,phase,preceded-by,followed-by,required,output-location,outputs
+Core,_meta,,,,,,,,,false,https://docs.bmad-method.org/llms.txt,
+Core,bmad-help,BMad Help,BH,System navigator and routing help for all BMad skills and agents.,,,anytime,,,false,,routing guide
+Core,bmad-brainstorming,Brainstorming,BSP,Use early in ideation or when stuck generating ideas.,,,plan,,,false,{output_folder}/brainstorming,brainstorming session
+Core,bmad-party-mode,Party Mode,PM,Orchestrate multi-agent discussions for collaborative alignment.,,,anytime,,,false,,multi-agent discussion
+Core,bmad-deep-recon,Deep Recon / Discovery,RS,Decision-grade market and technical discovery research.,,[type],discovery,,,false,{planning_artifacts}/research,research report
+BMM,bmad-project-context,Project Context,PC,Generate or refresh repository agent instructions and project invariants.,,,plan,,,false,repo root,project-context.md
+BMM,bmad-product-brief,Product Brief,CB,Nail down product concept in an initial brief.,,-A,plan,,,false,planning_artifacts,product brief
+BMM,bmad-prfaq,PRFAQ,WB,Working backwards guided experience to stress-test concept feasibility.,,-H,plan,,,false,planning_artifacts,prfaq document
+BMM,bmad-prd,Create and Validate PRD,PRD,Facilitated PRD discovery creation and validation.,,,plan,bmad-product-brief,,true,planning_artifacts,prd
+BMM,bmad-ux,Create UX,CU,Guidance through UX wireframing and user experience flow design.,,,plan,bmad-prd,,false,planning_artifacts,ux design
+BMM,bmad-architecture,Architecture Spine,CA,Produce architecture invariants spine and system components.,,,plan,bmad-prd,,true,planning_artifacts,architecture
+BMM,bmad-create-epics-and-stories,Create Epics and Stories,CE,Break architecture and PRD into epics and actionable stories.,,,plan,bmad-architecture,,true,planning_artifacts,epics and stories
+BMM,bmad-check-implementation-readiness,Implementation Readiness,IR,Pre-flight verification gate before sprint planning and build.,,,plan,bmad-create-epics-and-stories,,true,planning_artifacts,readiness report
+BMM,bmad-sprint-planning,Sprint Planning,SP,Initialize sprint status tracking SSOT from validated epics and stories.,,,plan,bmad-check-implementation-readiness,,true,implementation_artifacts,sprint status
+BMM,bmad-sprint-status,Sprint Status,SS,Summarize sprint progress risks and next recommended actions.,status,,anytime,,,false,,status summary
+BMM,bmad-create-story,Create Story,CS,Elaborate single story details and acceptance criteria.,,,plan,,,false,implementation_artifacts,story spec
+BMM,bmad-dev-story,Dev Story,DS,Implement a single story following strict TDD red-green cycle.,,,ship,bmad-create-story,,true,implementation_artifacts,code changes
+BMM,bmad-build,Build,BD,Official Phase 4 implementation loop for feature execution.,,,ship,bmad-sprint-planning,bmad-code-review,true,implementation_artifacts,feature build
+BMM,bmad-code-review,Code Review,CR,Ad hoc and gated code review across security LOC and test gates.,,,ship,bmad-build,,false,,code review report
+TEA,bmad-tea,Test Engineering Architecture,TEA,Strict TDD enforcement automated test suites and contract tests.,,,ship,,,true,test_artifacts,test suite
+BMM,bmad-qa-generate-e2e-tests,QA Automation Test,QA,Generate automated API and E2E browser smoke tests.,,,ship,bmad-build,,false,implementation_artifacts,test suite
+BMM,bmad-checkpoint-preview,Checkpoint Preview,CK,Guided walkthrough of changes before release or merge.,,,ship,,,false,,checkpoint report
+BMM,bmad-platinum-story-delivery,Platinum Story Delivery,PSD,End-to-end platinum delivery standard with automated verification gates.,,,ship,bmad-dev-story,,true,implementation_artifacts,platinum delivery report
+BMM,bmad-agent-rock,Agent Rock,ROCK,Lead delivery architect and gatekeeper for autonomous execution.,,,anytime,,,true,,execution status

@@ -1,0 +1,27 @@
+rules:
+  - id: avoid-wildcard-imports
+    languages: [python]
+    message: "Wildcard imports pollute namespace and obscure module size. Use explicit imports."
+    severity: WARNING
+    patterns:
+      - pattern: from $MOD import *
+
+  - id: avoid-raw-sql-concatenation
+    languages: [python]
+    message: "Potential SQL injection via raw string formatting. Use parameterized queries."
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $DB.execute(f"...")
+          - pattern: $DB.execute("..." % ...)
+          - pattern: $DB.execute("...".format(...))
+
+  - id: sync-blocking-io-in-async
+    languages: [python]
+    message: "Blocking sleep in async method. Use asyncio.sleep instead of time.sleep."
+    severity: WARNING
+    patterns:
+      - pattern: |
+          async def $FUNC(...):
+            ...
+            time.sleep(...)

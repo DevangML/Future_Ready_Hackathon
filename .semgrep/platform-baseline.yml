@@ -1,0 +1,27 @@
+rules:
+  - id: hardcoded-secret-key
+    languages: [python, javascript, typescript]
+    message: "Potential hardcoded secret or API token detected. Use environment variables."
+    severity: ERROR
+    patterns:
+      - pattern-either:
+          - pattern: $X = "sk-..."
+          - pattern: $X = "AIza..."
+          - pattern: const $X = "sk-..."
+          - pattern: const $X = "AIza..."
+          - pattern: let $X = "sk-..."
+          - pattern: let $X = "AIza..."
+
+  - id: dangerous-innerhtml
+    languages: [javascript, typescript]
+    message: "Direct innerHTML assignment detected. Use textContent or sanitized DOM."
+    severity: WARNING
+    patterns:
+      - pattern: $EL.innerHTML = $VAL
+
+  - id: dangerous-js-eval
+    languages: [javascript, typescript]
+    message: "eval() usage in JavaScript/TypeScript is forbidden."
+    severity: ERROR
+    patterns:
+      - pattern: eval(...)

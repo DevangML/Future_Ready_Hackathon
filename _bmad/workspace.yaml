@@ -1,0 +1,7 @@
+# BMad Workspace Configuration
+default_project: 'future-ready-hackathon'
+
+projects:
+  future-ready-hackathon:
+    path: .
+    description: Future Ready Hackathon AI OS project
