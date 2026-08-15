@@ -1,9 +1,17 @@
-# 📚 EduFlow OS: Master Documentation Index
+# 📚 EduFlow OS: Master Documentation & End-to-End Reference Index
 
 ## Overview
-Welcome to the comprehensive documentation and test suite for **EduFlow OS**, an Autonomous School Operating System developed for the **Future Ready Hackathon 2026** by **Team Ragnarok (VIT Pune)**.
+Welcome to the comprehensive documentation suite for **EduFlow OS**, an Autonomous School Operating System developed for the **Future Ready Hackathon 2026** by **Team Ragnarok (VIT Pune)**.
 
-This index maps the complete engineering lifecycle from vision and architecture to formal requirements, automated test specifications, and post-hackathon retrospective.
+---
+
+## 🌊 End-to-End System & Operations Documentation
+
+| Document | Purpose & Scope | Key Highlights |
+|---|---|---|
+| 🌊 [**End-to-End Pipeline Guide**](file:///Users/devang/Desktop/Future_Ready_Hackathon/docs/end-to-end-pipeline-guide.md) | Comprehensive stage-by-stage system lifecycle | Form VLM Ingestion $\rightarrow$ CP-SAT Solver $\rightarrow$ Smart Kiosk $\rightarrow$ Truancy AI |
+| 📡 [**REST API Reference**](file:///Users/devang/Desktop/Future_Ready_Hackathon/docs/api-reference.md) | Complete 14-endpoint REST specification | Request/response schemas, error handling, status codes |
+| 🚀 [**Deployment & Operations Guide**](file:///Users/devang/Desktop/Future_Ready_Hackathon/docs/deployment-operations-guide.md) | Setup, Docker, Vercel, and quality gate execution | Run scripts, environment variables, security compliance |
 
 ---
 
