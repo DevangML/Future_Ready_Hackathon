@@ -64,8 +64,10 @@ def resolve_disruption(req: DisruptionRequest):
     schedule_data = CURRENT_SCHEDULE.get("schedule", [])
     resolution = solver_engine.resolve_teacher_absence(req.teacher_id, req.day, schedule_data)
     for slot in schedule_data:
-        m = next((r for r in resolution["resolutions"] if r["period"] == slot["period"] and slot["day"] == req.day and (slot["teacher_id"] in [req.teacher_id, resolution["absent_teacher_id"]])), None)
+        orig_t_id = slot.get("original_teacher_id", slot.get("teacher_id"))
+        m = next((r for r in resolution["resolutions"] if r["period"] == slot["period"] and slot["day"] == req.day and (slot["teacher_id"] in [req.teacher_id, resolution["absent_teacher_id"]] or orig_t_id in [req.teacher_id, resolution["absent_teacher_id"]])), None)
         if m:
+            slot["original_teacher_id"] = orig_t_id
             slot["teacher_name"] = m["recommended_substitute"]
             slot["teacher_id"] = m["substitute_id"]
             slot["is_reassigned"] = True
@@ -85,8 +87,10 @@ def simulate_mass_absence():
         res = solver_engine.resolve_teacher_absence(t_id, day, CURRENT_SCHEDULE.get("schedule", []))
         all_resolutions.extend(res.get("resolutions", []))
         for slot in CURRENT_SCHEDULE.get("schedule", []):
-            m = next((item for item in res["resolutions"] if item["period"] == slot["period"] and slot["day"] == day and slot["teacher_id"] in [t_id, res["absent_teacher_id"]]), None)
+            orig_t_id = slot.get("original_teacher_id", slot.get("teacher_id"))
+            m = next((item for item in res["resolutions"] if item["period"] == slot["period"] and slot["day"] == day and (slot["teacher_id"] in [t_id, res["absent_teacher_id"]] or orig_t_id in [t_id, res["absent_teacher_id"]])), None)
             if m:
+                slot["original_teacher_id"] = orig_t_id
                 slot["teacher_name"] = m["recommended_substitute"]
                 slot["teacher_id"] = m["substitute_id"]
                 slot["is_reassigned"] = True
@@ -104,8 +108,10 @@ async def parse_document(file: UploadFile = File(...), sample_type: Optional[str
             t_id, day = parsed.get("teacher_id", "TCH_101"), parsed.get("date_of_absence", "Monday")
             res = solver_engine.resolve_teacher_absence(t_id, day, CURRENT_SCHEDULE.get("schedule", []))
             for slot in CURRENT_SCHEDULE.get("schedule", []):
-                m = next((r for r in res["resolutions"] if r["period"] == slot["period"] and slot["day"] == day and slot["teacher_id"] in [t_id, res["absent_teacher_id"]]), None)
+                orig_t_id = slot.get("original_teacher_id", slot.get("teacher_id"))
+                m = next((r for r in res["resolutions"] if r["period"] == slot["period"] and slot["day"] == day and (slot["teacher_id"] in [t_id, res["absent_teacher_id"]] or orig_t_id in [t_id, res["absent_teacher_id"]])), None)
                 if m:
+                    slot["original_teacher_id"] = orig_t_id
                     slot["teacher_name"], slot["teacher_id"], slot["is_reassigned"] = m["recommended_substitute"], m["substitute_id"], True
             return {"status": "SUCCESS", "filename": file.filename, "parsed_data": parsed, "auto_timetable_solved": True, "resolution": res}
         return {"status": "SUCCESS", "filename": file.filename, "parsed_data": parsed}
@@ -126,9 +132,9 @@ def verify_document(req: VerificationRequest):
     student_id = clean_aadhaar.split("-")[-1][:4] if "-" in clean_aadhaar else "99" + str(len(ATTENDANCE_LOGS) + 1)
     new_student = {
         "id": student_id, "name": html.escape(str(req.student_info.get("full_name", "Admitted Student")).strip()),
-        "grade": str(req.student_info.get("class_applying_for", "Grade 10-A")).strip(),
+        "grade": html.escape(str(req.student_info.get("class_applying_for", "Grade 10-A")).strip()),
         "roll_no": student_id, "qr_code": student_id,
-        "guardian_phone": str(req.parent_info.get("father_mobile", "--")).strip(),
+        "guardian_phone": html.escape(str(req.parent_info.get("father_mobile", "--")).strip()),
         "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150",
         "attendance_status": "ABSENT", "check_in_time": "--"
     }
@@ -141,8 +147,10 @@ def register_attendance(scan: AttendanceScanRequest):
         return {"status": "REJECTED", "message": "Anti-Cheat Alert: ID scanned, but no human face detected in webcam frame!", "green_flash": False}
     raw = str(scan.qr_code).split("\x00")[0].strip()
     clean = re.sub(r'[\u200B-\u200D\uFEFF]', '', raw)
-    if clean.startswith("{") and "id" in clean:
-        try: clean = str(json.loads(clean).get("id", clean))
+    if clean.startswith("{"):
+        try:
+            payload = json.loads(clean)
+            clean = str(payload.get("id") or payload.get("student_id") or payload.get("roll_no") or payload.get("qr_code") or clean)
         except Exception: pass
     clean = clean.replace("STU-", "").replace("EDU-", "").split("-")[0].strip()
     matched = next((s for s in ATTENDANCE_LOGS if str(s.get("id")) in [raw, clean] or str(s.get("qr_code")) in [raw, clean] or str(s.get("qr_token")) in [raw, clean]), None)

@@ -45,12 +45,20 @@ export default function ReactiveTimetable() {
 
   const applyReassignments = () => {
     if (!disruptionResult || !disruptionResult.resolutions) return;
+    const targetDay = disruptionResult.day || 'Monday';
+    const absentId = disruptionResult.absent_teacher_id || selectedTeacher;
     setSchedule(prev => prev.map(slot => {
       const match = disruptionResult.resolutions.find(
-        r => r.period === slot.period && slot.day === 'Monday' && slot.teacher_id === selectedTeacher
+        r => r.period === slot.period && slot.day === targetDay && (slot.teacher_id === absentId || slot.original_teacher_id === absentId || slot.teacher_id === selectedTeacher)
       );
       if (match) {
-        return { ...slot, teacher_name: match.recommended_substitute, teacher_id: match.substitute_id, is_reassigned: true };
+        return {
+          ...slot,
+          original_teacher_id: slot.original_teacher_id || slot.teacher_id,
+          teacher_name: match.recommended_substitute,
+          teacher_id: match.substitute_id,
+          is_reassigned: true
+        };
       }
       return slot;
     }));

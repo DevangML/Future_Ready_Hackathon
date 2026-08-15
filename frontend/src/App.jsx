@@ -70,6 +70,29 @@ export default function App() {
     }
   };
 
+  const tabTitles = {
+    dashboard: 'Overview',
+    dropzone: 'Document Scanner',
+    timetable: 'Timetable & Substitutes',
+    kiosk: 'Attendance Kiosk',
+    review: 'Human Review Inbox',
+    staffing: 'Staffing Analytics'
+  };
+
+  const handleResetDemo = async () => {
+    try {
+      const res = await fetch('/api/demo/reset', { method: 'POST' });
+      const data = await res.json();
+      if (data.status === 'SUCCESS') {
+        confetti({ particleCount: 60, spread: 70 });
+        setUnreviewedCount(0);
+        setActiveTab('dashboard');
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   const renderActiveView = () => {
     switch (activeTab) {
       case 'dashboard':
@@ -97,13 +120,12 @@ export default function App() {
 
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         <Header
-          activeTab={activeTab}
+          title={tabTitles[activeTab] || 'Overview'}
+          onSearchClick={() => setIsCommandOpen(true)}
           onTriggerLeave={handleDemoTriggerLeave}
+          onTriggerVlm={() => setActiveTab('dropzone')}
           onTriggerMassAbsence={handleDemoTriggerMassAbsence}
-          onOpenCommand={() => setIsCommandOpen(true)}
-          onShowArch={() => setShowArchDrawer(true)}
-          activeTheme={activeTheme}
-          setActiveTheme={setActiveTheme}
+          onResetDemo={handleResetDemo}
         />
         <main className="flex-1 overflow-y-auto">{renderActiveView()}</main>
       </div>

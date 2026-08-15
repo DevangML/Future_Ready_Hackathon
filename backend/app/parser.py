@@ -5,6 +5,7 @@ Implements Classification-Guided Schema Extraction, Spatial Grounding, and Calib
 import os
 import json
 import io
+import re
 from typing import Dict, Any, Optional
 from PIL import Image
 from dotenv import load_dotenv
@@ -47,12 +48,19 @@ class DocumentParser:
                 print(f"Gemini Client init warning: {e}")
 
     def _clean_markdown_json(self, text: str) -> Dict[str, Any]:
-        """Strips markdown code fences and parses strict JSON output."""
+        """Strips markdown code fences and parses strict JSON output with fallback extraction."""
         raw = text.strip()
         if raw.startswith("```json"): raw = raw[7:]
         elif raw.startswith("```"): raw = raw[3:]
         if raw.endswith("```"): raw = raw[:-3]
-        return json.loads(raw.strip())
+        clean_text = raw.strip()
+        try:
+            return json.loads(clean_text)
+        except json.JSONDecodeError:
+            match = re.search(r'\{.*\}', text, re.DOTALL)
+            if match:
+                return json.loads(match.group(0))
+            raise
 
     def parse_image_bytes(self, image_bytes: bytes, filename: str = "form.jpg", sample_type: Optional[str] = None) -> Dict[str, Any]:
         """Parses document bytes using Gemini 1.5 Flash Vision with uncertainty calibration."""
