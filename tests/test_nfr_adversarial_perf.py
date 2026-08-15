@@ -65,7 +65,7 @@ class TestNFRAdversarialPerf(unittest.TestCase):
             self.assertIn(res["status"], ["SUCCESS", "REJECTED"])
 
     def test_adversarial_verification_with_injection_strings(self):
-        """Security: Verify student registration safely handles SQL/XSS in names/fields."""
+        """Security: Verify student registration safely sanitizes/escapes XSS/SQL injections."""
         api_app.UNREVIEWED_DOCUMENTS.clear()
         api_app.UNREVIEWED_DOCUMENTS.append({"document_type": "STUDENT_ADMISSION_FORM"})
         
@@ -77,7 +77,9 @@ class TestNFRAdversarialPerf(unittest.TestCase):
         )
         res = api_app.verify_document(req)
         self.assertEqual(res["status"], "SUCCESS")
-        self.assertEqual(res["student"]["name"], "<script>alert('pwn')</script>")
+        # Ensure payload is HTML-escaped to prevent stored XSS attacks
+        self.assertNotIn("<script>", res["student"]["name"])
+        self.assertIn("&lt;script&gt;", res["student"]["name"])
 
     def test_concurrency_and_throughput_kiosk_scans(self):
         """NFR Stress: 100 rapid attendance scans must execute in < 0.05 seconds total."""
@@ -98,7 +100,6 @@ class TestNFRAdversarialPerf(unittest.TestCase):
         res = api_app.reset_demo_state()
         self.assertEqual(res["status"], "SUCCESS")
         self.assertEqual(len(api_app.UNREVIEWED_DOCUMENTS), 0)
-        # All initial students should be ABSENT
         for student in api_app.ATTENDANCE_LOGS:
             self.assertEqual(student["attendance_status"], "ABSENT")
 

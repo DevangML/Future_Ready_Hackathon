@@ -1,13 +1,13 @@
 # 📚 EduFlow OS: Master Documentation Index
 
 ## Overview
-Welcome to the comprehensive documentation suite for **EduFlow OS**, an Autonomous School Operating System developed for the **Future Ready Hackathon 2026** by **Team Ragnarok (VIT Pune)**.
+Welcome to the comprehensive documentation and test suite for **EduFlow OS**, an Autonomous School Operating System developed for the **Future Ready Hackathon 2026** by **Team Ragnarok (VIT Pune)**.
 
-This index maps the complete engineering lifecycle from vision and requirements to architecture, product specification, and post-hackathon retrospective.
+This index maps the complete engineering lifecycle from vision and architecture to formal requirements, automated test specifications, and post-hackathon retrospective.
 
 ---
 
-## 🗂️ Documentation Suite Structure
+## 🗂️ Planning & Systems Architecture Artifacts
 
 | Document | Purpose & Scope | Key Highlights |
 |---|---|---|
@@ -21,17 +21,19 @@ This index maps the complete engineering lifecycle from vision and requirements 
 
 ---
 
-## 🚀 Quick Navigation & Key Endpoints
+## 🧪 Enterprise Test Architecture Artifacts (bmad-tea)
 
-- **Interactive Timetable & Disruption Solver**: `POST /api/timetable/disruption`
-- **Vision Document Ingestion**: `POST /api/document/process`
-- **Anti-Cheat Kiosk Attendance**: `POST /api/kiosk/attendance`
-- **Human Review & Document Verification**: `POST /api/document/verify`
-- **Live Campus Statistics**: `GET /api/dashboard/stats`
-- **Truancy & Staffing Risk Analytics**: `GET /api/students/predict-risk` & `GET /api/staffing/predict`
+| Test Specification | Focus & Methodologies | Deliverables |
+|---|---|---|
+| 🥒 [**ATDD Specifications**](file:///Users/devang/Desktop/Future_Ready_Hackathon/_bmad-output/test-artifacts/atdd-specifications.md) | Acceptance Test-Driven Development Gherkin scenarios | Happy, alternative, and negative flows for Epics 1–6 |
+| 🧭 [**Traceability Matrix**](file:///Users/devang/Desktop/Future_Ready_Hackathon/_bmad-output/test-artifacts/traceability-matrix.md) | 100% Requirements-to-Test coverage mapping | FR/NFR $\rightarrow$ Unit $\rightarrow$ E2E, 0 gaps, 0 orphans |
+| ⚙️ [**Automation Strategy**](file:///Users/devang/Desktop/Future_Ready_Hackathon/_bmad-output/test-artifacts/automation-strategy.md) | Test automation pyramid, fixture isolation, CI SLAs | Multi-layer test pyramid, sub-5ms feedback loop |
+| 🛡️ [**NFR & Security Spec**](file:///Users/devang/Desktop/Future_Ready_Hackathon/_bmad-output/test-artifacts/nfr-performance-security.md) | Latency SLOs, edge CV benchmarks, adversarial tests | Sub-50ms solver, 60 FPS CV, anti-buddy-punching |
+| 📐 [**Formal Test Design**](file:///Users/devang/Desktop/Future_Ready_Hackathon/_bmad-output/test-artifacts/test-design.md) | Equivalence Partitioning, BVA, Decision Tables, FSMs | Boundary points, confidence tables, state machines |
+| 🏗️ [**Test Framework Spec**](file:///Users/devang/Desktop/Future_Ready_Hackathon/_bmad-output/test-artifacts/test-framework.md) | Test topology, runner matrix, and fixture harness | Pytest, Unittest, Node.js E2E, Playwright |
 
 ---
 
 ## 👥 Authors & Acknowledgments
 - **Team**: Ragnarok (Vishwakarma Institute of Technology, Pune)
-- **Framework**: BMad AI OS & Google DeepMind Antigravity Pair-Programming
+- **Framework**: BMad AI OS (bmad-tea & bmad-cis modules)
