@@ -38,6 +38,7 @@ class VerificationRequest(BaseModel):
     address: Dict[str, Any]
 
 @app.get("/")
+@app.get("/health")
 def read_root():
     return {"app": "EduFlow Engine API", "status": "ONLINE", "features": ["OR-Tools Timetabling", "Live Disruption Solver", "Gemini Document Parser", "Smart Kiosk Attendance"]}
 
